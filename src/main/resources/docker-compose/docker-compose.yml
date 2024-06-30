@@ -1,0 +1,19 @@
+version: '3'
+services: 
+  site-service:
+    restart: always
+    image: openjdk:17-jdk-alpine
+    container_name: seekerhut-girlfriend
+    command: /bin/bash -c "java -jar girlfriend.jar"
+    working_dir: /running
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/hosts:/etc/hosts:ro
+      - /opt/seekerhut-girlfriend/target/:/running/
+    networks: 
+      - backend
+    ports: 
+      - "38496:8080"
+
+networks:
+  backend:
