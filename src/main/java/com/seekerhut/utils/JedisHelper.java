@@ -66,8 +66,12 @@ public class JedisHelper {
     public static void set(String key, Object val, int seconds) {
         key = prefix + key;
         Jedis jedis = jedisPool.getResource();
-        SetParams params = SetParams.setParams().ex(seconds);
-        jedis.set(key, val.toString(), params);
+        if (seconds > 0) {
+            SetParams params = SetParams.setParams().ex(seconds);
+            jedis.set(key, val.toString(), params);
+        } else {
+            jedis.set(key, val.toString());
+        }
         jedis.close();
     }
 
@@ -108,6 +112,14 @@ public class JedisHelper {
         }
         ppl.sync();
         jedis.close();
+    }
+
+    public static String get(String key) {
+        key = prefix + key;
+        Jedis jedis = jedisPool.getResource();
+        String result = jedis.get(key);
+        jedis.close();
+        return result;
     }
 
     public static <T> T get(String key, Class<T> clazz) {

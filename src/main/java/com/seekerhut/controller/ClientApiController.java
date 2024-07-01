@@ -30,6 +30,7 @@ public class ClientApiController extends BaseController {
     public ClientApiController() {
     }
 
+    @CrossOrigin
     @PostMapping("set_character_system_prompt")
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
@@ -37,7 +38,7 @@ public class ClientApiController extends BaseController {
     public @ResponseBody String getCharacterSystemPrompt(String userToken, String characterName, String characterPrompt) {
         try {
             String userName = "testUser";
-            JedisHelper.set(String.format("%s:%s", userName, characterName), characterPrompt);
+            JedisHelper.set(String.format("%s:prompt:%s", userName, characterName), characterPrompt);
             return Success("ok");
         }
         catch (Exception e) {
@@ -45,14 +46,50 @@ public class ClientApiController extends BaseController {
         }
     }
 
-    @PostMapping("get_character_system_prompt")
+    @CrossOrigin
+    @GetMapping("get_character_system_prompt")
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
     public @ResponseBody String getCharacterSystemPrompt(String userToken, String characterName) {
         try {
             String userName = "testUser";
-            var systemPrompt = JedisHelper.get(String.format("%s:%s", userName, characterName), String.class);
+            var systemPrompt = JedisHelper.get(String.format("%s:prompt:%s", userName, characterName));
+            if (systemPrompt == null || systemPrompt.length() == 0) {
+                return Fail("Character not found.");
+            }
+            return Success(systemPrompt);
+        }
+        catch (Exception e) {
+            return Fail(-1, "msg: " + e.getMessage() + ", stack: " + String.join("\n", Arrays.stream(e.getStackTrace()).map(s -> s.toString()).collect(Collectors.toList())));
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("set_chatlog")
+    @ApiImplicitParams({
+            //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
+    })
+    public @ResponseBody String getChatlog(String userToken, String characterName, String chatlog) {
+        try {
+            String userName = "testUser";
+            JedisHelper.set(String.format("%s:chatlog:%s", userName, characterName), chatlog);
+            return Success("ok");
+        }
+        catch (Exception e) {
+            return Fail(-1, "msg: " + e.getMessage() + ", stack: " + String.join("\n", Arrays.stream(e.getStackTrace()).map(s -> s.toString()).collect(Collectors.toList())));
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("get_chatlog")
+    @ApiImplicitParams({
+            //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
+    })
+    public @ResponseBody String getChatlog(String userToken, String characterName) {
+        try {
+            String userName = "testUser";
+            var systemPrompt = JedisHelper.get(String.format("%s:chatlog:%s", userName, characterName));
             if (systemPrompt == null || systemPrompt.length() == 0) {
                 return Fail("Character not found.");
             }
@@ -93,6 +130,4 @@ public class ClientApiController extends BaseController {
             return Fail(-1, "msg: " + e.getMessage() + ", stack: " + String.join("\n", Arrays.stream(e.getStackTrace()).map(s -> s.toString()).collect(Collectors.toList())));
         }
     }
-
-
 }
