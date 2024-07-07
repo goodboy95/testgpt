@@ -21,13 +21,4 @@ public class EnumAndConstData {
         wordchar,
         chinese,
     }
-
-    public enum ErrorInfo {
-        thirdpartyAPIError(-100);
-
-        private final int value;
-        private ErrorInfo(int errCode) {
-            this.value = errCode;
-        }
-    }
 }

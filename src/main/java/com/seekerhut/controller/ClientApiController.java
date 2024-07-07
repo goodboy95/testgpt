@@ -2,8 +2,6 @@ package com.seekerhut.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.seekerhut.model.bean.CharacterBean;
-import com.seekerhut.model.bean.DialogDataBean;
 import com.seekerhut.model.config.BaseConfig;
 import com.seekerhut.utils.CommonFunctions;
 import com.seekerhut.utils.ConstValues;
@@ -26,7 +24,6 @@ public class ClientApiController extends BaseController {
 
     public String gptApi = "https://api.chatanywhere.com.cn/v1/chat/completions";
     public String voiceApi = "";
-    public HashMap<Long, DialogDataBean> dialogMap = new HashMap<>();
     public ClientApiController() {
     }
 
@@ -35,10 +32,9 @@ public class ClientApiController extends BaseController {
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
-    public @ResponseBody String getCharacterSystemPrompt(String userToken, String characterName, String characterPrompt) {
+    public @ResponseBody String setCharacterSystemPrompt(@CookieValue String userqq, String characterName, String characterPrompt) {
         try {
-            String userName = "testUser";
-            JedisHelper.set(String.format("%s:prompt:%s", userName, characterName), characterPrompt);
+            JedisHelper.set(String.format("%s:prompt:%s", userqq, characterName), characterPrompt);
             return Success("ok");
         }
         catch (Exception e) {
@@ -51,12 +47,14 @@ public class ClientApiController extends BaseController {
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
-    public @ResponseBody String getCharacterSystemPrompt(String userToken, String characterName) {
+    public @ResponseBody String getCharacterSystemPrompt(@CookieValue String userqq, String characterName) {
         try {
-            String userName = "testUser";
-            var systemPrompt = JedisHelper.get(String.format("%s:prompt:%s", userName, characterName));
+            var systemPrompt = JedisHelper.get(String.format("%s:prompt:%s", userqq, characterName));
             if (systemPrompt == null || systemPrompt.length() == 0) {
-                return Fail("Character not found.");
+                systemPrompt = JedisHelper.get(String.format("%s:prompt:%s", "testUser", characterName));
+                if (systemPrompt == null || systemPrompt.length() == 0) {
+                    return Fail("Character not found.");
+                }
             }
             return Success(systemPrompt);
         }
@@ -70,10 +68,9 @@ public class ClientApiController extends BaseController {
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
-    public @ResponseBody String getChatlog(String userToken, String characterName, String chatlog) {
+    public @ResponseBody String setChatlog(@CookieValue String userqq, String characterName, String chatlog) {
         try {
-            String userName = "testUser";
-            JedisHelper.set(String.format("%s:chatlog:%s", userName, characterName), chatlog);
+            JedisHelper.set(String.format("%s:chatlog:%s", userqq, characterName), chatlog);
             return Success("ok");
         }
         catch (Exception e) {
@@ -86,10 +83,9 @@ public class ClientApiController extends BaseController {
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
-    public @ResponseBody String getChatlog(String userToken, String characterName) {
+    public @ResponseBody String getChatlog(@CookieValue String userqq, String characterName) {
         try {
-            String userName = "testUser";
-            var systemPrompt = JedisHelper.get(String.format("%s:chatlog:%s", userName, characterName));
+            var systemPrompt = JedisHelper.get(String.format("%s:chatlog:%s", userqq, characterName));
             if (systemPrompt == null || systemPrompt.length() == 0) {
                 return Fail("Character not found.");
             }
@@ -105,10 +101,10 @@ public class ClientApiController extends BaseController {
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
-    public @ResponseBody String chat(String userToken, String msg, String chatHistory) {
+    public @ResponseBody String chat(@CookieValue String userqq, String msg, String chatHistory) {
         try {
             var chatHistoryJArray = JSONArray.parseArray(chatHistory);
-            String returnData = CommonFunctions.GLMCommonRequest("b1d8aee88ec4528a93a3ca834c57714a.e1wBdUKRnAFFwXJD", "glm-4-flash", msg, chatHistoryJArray);
+            String returnData = CommonFunctions.GLMCommonRequest("b1d8aee88ec4528a93a3ca834c57714a.e1wBdUKRnAFFwXJD", userqq, "glm-4-flash", msg, chatHistoryJArray);
             return Success(returnData);
         }
         catch (Exception e) {
@@ -121,9 +117,9 @@ public class ClientApiController extends BaseController {
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })
-    public @ResponseBody String kbRetrieve(String userToken, String kbid, String msg) {
+    public @ResponseBody String kbRetrieve(@CookieValue String userqq, String kbid, String msg) {
         try {
-            var resp = CommonFunctions.GLMKnowledgeBaseRequest("b1d8aee88ec4528a93a3ca834c57714a.e1wBdUKRnAFFwXJD", "glm-4-flash", msg, kbid);
+            var resp = CommonFunctions.GLMKnowledgeBaseRequest("b1d8aee88ec4528a93a3ca834c57714a.e1wBdUKRnAFFwXJD", userqq, "glm-4-flash", msg, kbid);
             return Success(resp);
         }
         catch (Exception e) {

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seekerhut.mySqlMapper.UserDAO">
+  <resultMap id="BaseResultMap" type="com.seekerhut.model.mysqlModel.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_qq" jdbcType="VARCHAR" property="userQq" />
+    <result column="user_pass" jdbcType="VARCHAR" property="userPass" />
+    <result column="user_activate_token" jdbcType="VARCHAR" property="userActivateToken" />
+    <result column="user_is_activate" jdbcType="TINYINT" property="userIsActivate" />
+    <result column="user_createtime" jdbcType="TIMESTAMP" property="userCreatetime" />
+    <result column="user_updatetime" jdbcType="TIMESTAMP" property="userUpdatetime" />
+    <result column="user_is_deleted" jdbcType="TINYINT" property="userIsDeleted" />
+    <result column="user_deletetime" jdbcType="TIMESTAMP" property="userDeletetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_name, user_qq, user_pass, user_activate_token, user_is_activate, user_createtime, 
+    user_updatetime, user_is_deleted, user_deletetime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.seekerhut.model.mysqlModel.User">
+    insert into user (user_id, user_name, user_qq, 
+      user_pass, user_activate_token, user_is_activate, 
+      user_createtime, user_updatetime, user_is_deleted, 
+      user_deletetime)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR}, 
+      #{userPass,jdbcType=VARCHAR}, #{userActivateToken,jdbcType=VARCHAR}, #{userIsActivate,jdbcType=TINYINT}, 
+      #{userCreatetime,jdbcType=TIMESTAMP}, #{userUpdatetime,jdbcType=TIMESTAMP}, #{userIsDeleted,jdbcType=TINYINT}, 
+      #{userDeletetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.seekerhut.model.mysqlModel.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userQq != null">
+        user_qq,
+      </if>
+      <if test="userPass != null">
+        user_pass,
+      </if>
+      <if test="userActivateToken != null">
+        user_activate_token,
+      </if>
+      <if test="userIsActivate != null">
+        user_is_activate,
+      </if>
+      <if test="userCreatetime != null">
+        user_createtime,
+      </if>
+      <if test="userUpdatetime != null">
+        user_updatetime,
+      </if>
+      <if test="userIsDeleted != null">
+        user_is_deleted,
+      </if>
+      <if test="userDeletetime != null">
+        user_deletetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userQq != null">
+        #{userQq,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null">
+        #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userActivateToken != null">
+        #{userActivateToken,jdbcType=VARCHAR},
+      </if>
+      <if test="userIsActivate != null">
+        #{userIsActivate,jdbcType=TINYINT},
+      </if>
+      <if test="userCreatetime != null">
+        #{userCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdatetime != null">
+        #{userUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIsDeleted != null">
+        #{userIsDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="userDeletetime != null">
+        #{userDeletetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seekerhut.model.mysqlModel.User">
+    update user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userQq != null">
+        user_qq = #{userQq,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null">
+        user_pass = #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userActivateToken != null">
+        user_activate_token = #{userActivateToken,jdbcType=VARCHAR},
+      </if>
+      <if test="userIsActivate != null">
+        user_is_activate = #{userIsActivate,jdbcType=TINYINT},
+      </if>
+      <if test="userCreatetime != null">
+        user_createtime = #{userCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userUpdatetime != null">
+        user_updatetime = #{userUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userIsDeleted != null">
+        user_is_deleted = #{userIsDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="userDeletetime != null">
+        user_deletetime = #{userDeletetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seekerhut.model.mysqlModel.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_qq = #{userQq,jdbcType=VARCHAR},
+      user_pass = #{userPass,jdbcType=VARCHAR},
+      user_activate_token = #{userActivateToken,jdbcType=VARCHAR},
+      user_is_activate = #{userIsActivate,jdbcType=TINYINT},
+      user_createtime = #{userCreatetime,jdbcType=TIMESTAMP},
+      user_updatetime = #{userUpdatetime,jdbcType=TIMESTAMP},
+      user_is_deleted = #{userIsDeleted,jdbcType=TINYINT},
+      user_deletetime = #{userDeletetime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <select id="qqIsRegistered" resultType="java.lang.Integer">
+    select 1 from `user` where user_qq=#{userQQ,jdbcType=VARCHAR} and user_is_activate=1 and user_is_deleted=0
+  </select>
+
+  <select id="getUserByQQAndToken" resultMap="BaseResultMap">
+    select * from `user` where user_qq=#{userQQ,jdbcType=VARCHAR} and user_activate_token=#{token,jdbcType=VARCHAR} and user_is_deleted=0
+  </select>
+
+  <select id="getUserByValidQQ" resultMap="BaseResultMap">
+    select * from `user` where user_qq=#{userQQ,jdbcType=VARCHAR} and user_is_activate=1 and user_is_deleted=0
+  </select>
+</mapper>

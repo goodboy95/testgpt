@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seekerhut.mySqlMapper.DialogDAO">
+  <resultMap id="BaseResultMap" type="com.seekerhut.model.mysqlModel.Dialog">
+    <id column="dialog_id" jdbcType="BIGINT" property="dialogId" />
+    <result column="dialog_characterid" jdbcType="INTEGER" property="dialogCharacterid" />
+    <result column="dialog_name" jdbcType="VARCHAR" property="dialogName" />
+    <result column="dialog_createtime" jdbcType="TIMESTAMP" property="dialogCreatetime" />
+    <result column="dialog_updatetime" jdbcType="TIMESTAMP" property="dialogUpdatetime" />
+    <result column="dialog_is_deleted" jdbcType="VARCHAR" property="dialogIsDeleted" />
+    <result column="dialog_deletetime" jdbcType="TIMESTAMP" property="dialogDeletetime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.seekerhut.model.mysqlModel.Dialog">
+    <result column="dialog_content" jdbcType="LONGVARCHAR" property="dialogContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dialog_id, dialog_characterid, dialog_name, dialog_createtime, dialog_updatetime, 
+    dialog_is_deleted, dialog_deletetime
+  </sql>
+  <sql id="Blob_Column_List">
+    dialog_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from dialog
+    where dialog_id = #{dialogId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dialog
+    where dialog_id = #{dialogId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.seekerhut.model.mysqlModel.Dialog">
+    insert into dialog (dialog_id, dialog_characterid, dialog_name, 
+      dialog_createtime, dialog_updatetime, 
+      dialog_is_deleted, dialog_deletetime, dialog_content
+      )
+    values (#{dialogId,jdbcType=BIGINT}, #{dialogCharacterid,jdbcType=INTEGER}, #{dialogName,jdbcType=VARCHAR}, 
+      #{dialogCreatetime,jdbcType=TIMESTAMP}, #{dialogUpdatetime,jdbcType=TIMESTAMP}, 
+      #{dialogIsDeleted,jdbcType=VARCHAR}, #{dialogDeletetime,jdbcType=TIMESTAMP}, #{dialogContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.seekerhut.model.mysqlModel.Dialog">
+    insert into dialog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dialogId != null">
+        dialog_id,
+      </if>
+      <if test="dialogCharacterid != null">
+        dialog_characterid,
+      </if>
+      <if test="dialogName != null">
+        dialog_name,
+      </if>
+      <if test="dialogCreatetime != null">
+        dialog_createtime,
+      </if>
+      <if test="dialogUpdatetime != null">
+        dialog_updatetime,
+      </if>
+      <if test="dialogIsDeleted != null">
+        dialog_is_deleted,
+      </if>
+      <if test="dialogDeletetime != null">
+        dialog_deletetime,
+      </if>
+      <if test="dialogContent != null">
+        dialog_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dialogId != null">
+        #{dialogId,jdbcType=BIGINT},
+      </if>
+      <if test="dialogCharacterid != null">
+        #{dialogCharacterid,jdbcType=INTEGER},
+      </if>
+      <if test="dialogName != null">
+        #{dialogName,jdbcType=VARCHAR},
+      </if>
+      <if test="dialogCreatetime != null">
+        #{dialogCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogUpdatetime != null">
+        #{dialogUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogIsDeleted != null">
+        #{dialogIsDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="dialogDeletetime != null">
+        #{dialogDeletetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogContent != null">
+        #{dialogContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seekerhut.model.mysqlModel.Dialog">
+    update dialog
+    <set>
+      <if test="dialogCharacterid != null">
+        dialog_characterid = #{dialogCharacterid,jdbcType=INTEGER},
+      </if>
+      <if test="dialogName != null">
+        dialog_name = #{dialogName,jdbcType=VARCHAR},
+      </if>
+      <if test="dialogCreatetime != null">
+        dialog_createtime = #{dialogCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogUpdatetime != null">
+        dialog_updatetime = #{dialogUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogIsDeleted != null">
+        dialog_is_deleted = #{dialogIsDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="dialogDeletetime != null">
+        dialog_deletetime = #{dialogDeletetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogContent != null">
+        dialog_content = #{dialogContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where dialog_id = #{dialogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.seekerhut.model.mysqlModel.Dialog">
+    update dialog
+    set dialog_characterid = #{dialogCharacterid,jdbcType=INTEGER},
+      dialog_name = #{dialogName,jdbcType=VARCHAR},
+      dialog_createtime = #{dialogCreatetime,jdbcType=TIMESTAMP},
+      dialog_updatetime = #{dialogUpdatetime,jdbcType=TIMESTAMP},
+      dialog_is_deleted = #{dialogIsDeleted,jdbcType=VARCHAR},
+      dialog_deletetime = #{dialogDeletetime,jdbcType=TIMESTAMP},
+      dialog_content = #{dialogContent,jdbcType=LONGVARCHAR}
+    where dialog_id = #{dialogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seekerhut.model.mysqlModel.Dialog">
+    update dialog
+    set dialog_characterid = #{dialogCharacterid,jdbcType=INTEGER},
+      dialog_name = #{dialogName,jdbcType=VARCHAR},
+      dialog_createtime = #{dialogCreatetime,jdbcType=TIMESTAMP},
+      dialog_updatetime = #{dialogUpdatetime,jdbcType=TIMESTAMP},
+      dialog_is_deleted = #{dialogIsDeleted,jdbcType=VARCHAR},
+      dialog_deletetime = #{dialogDeletetime,jdbcType=TIMESTAMP}
+    where dialog_id = #{dialogId,jdbcType=BIGINT}
+  </update>
+</mapper>

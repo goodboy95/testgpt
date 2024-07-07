@@ -3,26 +3,29 @@ package com.seekerhut.model.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "spring.application")
+@ConfigurationProperties(prefix = "config")
 @Component
 
 public class BaseConfig {
-	private String gptkey;
-	private String voicekey;
+	private Key key;
 
-	public String getGptkey() {
-		return gptkey;
+	public static class Key {
+		private String testKey;
+
+		public String getTestKey() {
+			return testKey;
+		}
+
+		public void setTestKey(String testKey) {
+			this.testKey = testKey;
+		}
 	}
 
-	public void setGptkey(String gptkey) {
-		this.gptkey = gptkey;
+	public Key getKey() {
+		return key;
 	}
 
-	public String getVoicekey() {
-		return voicekey;
-	}
-
-	public void setVoicekey(String voicekey) {
-		this.voicekey = voicekey;
+	public void setKey(Key key) {
+		this.key = key;
 	}
 }

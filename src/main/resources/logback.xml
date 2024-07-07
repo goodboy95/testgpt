@@ -3,12 +3,6 @@
     <property name="logLevel" value="ALL" />
     <contextName>logtest</contextName>
     
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{1} - %msg%n</Pattern>
-        </encoder>
-    </appender>
-    
     <appender name="FILEOUT-DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">

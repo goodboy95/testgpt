@@ -2,8 +2,6 @@ package com.seekerhut.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.seekerhut.model.bean.CharacterBean;
-import com.seekerhut.model.bean.DialogDataBean;
 import com.seekerhut.utils.EnumAndConstData.CharRangeKey;
 import org.apache.http.HttpException;
 import org.apache.http.client.methods.HttpPost;
@@ -11,10 +9,17 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,8 +29,12 @@ import java.util.stream.Collectors;
 
 public class CommonFunctions {
     private static CloseableHttpClient client;
+    private static Logger logger;
+    private static DateTimeFormatter dateFormatter;
     static {
         client = HttpClients.createDefault();
+        logger = LoggerFactory.getLogger(CommonFunctions.class);
+        dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 
     private static HashMap<String, AtomicLong> currentPrimaryKeyId = new HashMap<>();
@@ -96,6 +105,30 @@ public class CommonFunctions {
     }
 
     /**
+     * 执行sha256运算
+     * @param input
+     * @return
+     */
+    public static String getSHA256Hash(String input) {
+        try {
+            // 创建SHA-256消息摘要对象
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            // 更新要哈希的数据
+            md.update(input.getBytes(StandardCharsets.UTF_8));
+            // 完成哈希计算，得到结果
+            byte[] digest = md.digest();
+            // 将结果转换为十六进制字符串
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256算法不可用", e);
+        }
+    }
+
+    /**
      * GLM公共请求方法
      * @param apikey apikey
      * @param modelName 模型名称
@@ -104,7 +137,7 @@ public class CommonFunctions {
      * @return GLM模型返回的提示语
      * @throws Exception
      */
-    public static String GLMCommonRequest(String apikey, String modelName, String prompt, JSONArray historyData) throws Exception {
+    public static String GLMCommonRequest(String apikey, String userqq, String modelName, String prompt, JSONArray historyData) throws Exception {
         var url = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
         var chatBody = new JSONObject() {
             {
@@ -117,6 +150,7 @@ public class CommonFunctions {
             {
                 put("model", modelName);
                 put("messages", historyData);
+                put("user_id", userqq);
             }
         };
         var headers = new HashMap<String, String>() {
@@ -131,6 +165,8 @@ public class CommonFunctions {
         var tokenUsage = gptJsonResult.getJSONObject("usage");
         var promptTokens = tokenUsage.getInteger("prompt_tokens");
         var completionTokens = tokenUsage.getInteger("completion_tokens");
+        logger.info(String.join(String.format("userqq: %s, promptToken: %s, completionToken: %s", userqq, promptTokens.toString(), completionTokens.toString())));
+        JedisHelper.incrBy(String.format("usedTokens:%s:%s", userqq, LocalDate.now().format(dateFormatter)), promptTokens + completionTokens);
         var completionStr = completionData.getString("content");
         return completionStr;
     }
@@ -144,7 +180,7 @@ public class CommonFunctions {
      * @return GLM模型返回的提示语
      * @throws Exception
      */
-    public static String GLMKnowledgeBaseRequest(String apikey, String modelName, String prompt, String kbid) throws Exception {
+    public static String GLMKnowledgeBaseRequest(String apikey, String userqq, String modelName, String prompt, String kbid) throws Exception {
         var url = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
         var submitDialog = new ArrayList<JSONObject>();
         var chatBody = new JSONObject() {
@@ -173,6 +209,7 @@ public class CommonFunctions {
                 put("messages", submitDialog);
                 put("temperature", 0.1);
                 put("tools", tools);
+                put("user_id", userqq);
             }
         };
         var headers = new HashMap<String, String>() {
@@ -187,6 +224,8 @@ public class CommonFunctions {
         var tokenUsage = gptJsonResult.getJSONObject("usage");
         var promptTokens = tokenUsage.getInteger("prompt_tokens");
         var completionTokens = tokenUsage.getInteger("completion_tokens");
+        logger.info(String.join(String.format("userqq: %s, promptToken: %s, completionToken: %s", userqq, promptTokens.toString(), completionTokens.toString())));
+        JedisHelper.incrBy(String.format("usedTokens:%s:%s", userqq, LocalDate.now().format(dateFormatter)), promptTokens + completionTokens);
         var completionStr = completionData.getString("content");
         return completionStr;
     }

@@ -1,8 +1,8 @@
 package com.seekerhut.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 
@@ -17,8 +17,8 @@ public class BaseController {
             var jobj = new JSONObject();
             jobj.put("code", 0);
             jobj.put("message", msg);
-            if (dataStr.substring(0, 1).equals("[")) jobj.put("data", JSONArray.parseArray(dataStr));
-            else if (dataStr.substring(0, 1).equals("{")) jobj.put("data", JSONObject.parseObject(dataStr));
+            if (dataStr.substring(0, 1).equals("[")) jobj.put("Data", new JSONArray(dataStr));
+            else if (dataStr.substring(0, 1).equals("{")) jobj.put("Data", new JSONObject(dataStr));
             else jobj.put("data", data);
             return jobj.toString();
         }

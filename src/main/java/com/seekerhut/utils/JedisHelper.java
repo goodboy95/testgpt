@@ -48,14 +48,14 @@ public class JedisHelper {
             String host = redisConfig.getHost();
             int port = redisConfig.getPort();
             jedisPool = password.equals("")
-                ? new JedisPool(jedisPoolConfig, host, port, timeout, null, database)
-                : new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
+                    ? new JedisPool(jedisPoolConfig, host, port, timeout, null, database)
+                    : new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
         } else {
             var masterName = redisConfig.getSentinel().getMaster();
             var sentinelNodes = redisConfig.getSentinel().getNodes();
             jedisPool = password.equals("")
-                ? new JedisSentinelPool(masterName, sentinelNodes, jedisPoolConfig, timeout, password, database)
-                : new JedisSentinelPool(masterName, sentinelNodes, jedisPoolConfig, timeout, password, database);
+                    ? new JedisSentinelPool(masterName, sentinelNodes, jedisPoolConfig, timeout, password, database)
+                    : new JedisSentinelPool(masterName, sentinelNodes, jedisPoolConfig, timeout, password, database);
         }
     }
     //#region ordinary data
@@ -312,13 +312,13 @@ public class JedisHelper {
         return result;
     }
 
-     public static void zadd(String key, Object... data) {
-         key = prefix + key;
-         Jedis jedis = jedisPool.getResource();
-         var scoreMemberMap = Arrays.stream(data).collect(Collectors.toMap(c -> String.valueOf(c), c -> 0.0d));
-         jedis.zadd(key, scoreMemberMap);
-         jedis.close();
-     }
+    public static void zadd(String key, Object... data) {
+        key = prefix + key;
+        Jedis jedis = jedisPool.getResource();
+        var scoreMemberMap = Arrays.stream(data).collect(Collectors.toMap(c -> String.valueOf(c), c -> 0.0d));
+        jedis.zadd(key, scoreMemberMap);
+        jedis.close();
+    }
 
     public static Set<String> zrange(String key, int start, int end) {
         key = prefix + key;

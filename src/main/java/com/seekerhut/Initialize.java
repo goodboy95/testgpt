@@ -16,6 +16,8 @@ public class Initialize implements ApplicationRunner {
 
     public void run(ApplicationArguments args) throws Exception {
         JedisHelper.init(redisConfig);
+        // HBase init
+        // HBaseHelper.initConnection();
         System.out.println("Application initialization completed, start running...");
     }
 }

@@ -4,6 +4,12 @@ spring:
     gptkey: sk-Wl0uS50KJ5GoqNwOJX6tdHhYl1jGPyoOxvv1Oq7eZtW1dVyp
     glmkey: b1d8aee88ec4528a93a3ca834c57714a.e1wBdUKRnAFFwXJD
     voicekey: sk-5547696b5c5d1b88c5af4f12832dba37
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://43.136.95.117:3306/girlfriend?useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: 43.136.95.117
     port: 6380

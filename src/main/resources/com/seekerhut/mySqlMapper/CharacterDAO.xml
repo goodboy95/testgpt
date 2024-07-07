@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seekerhut.mySqlMapper.CharacterDAO">
+  <resultMap id="BaseResultMap" type="com.seekerhut.model.mysqlModel.Character">
+    <id column="character_id" jdbcType="INTEGER" property="characterId" />
+    <result column="character_userid" jdbcType="INTEGER" property="characterUserid" />
+    <result column="character_name" jdbcType="VARCHAR" property="characterName" />
+    <result column="character_createtime" jdbcType="TIMESTAMP" property="characterCreatetime" />
+    <result column="character_updatetime" jdbcType="TIMESTAMP" property="characterUpdatetime" />
+    <result column="character_is_deleted" jdbcType="VARCHAR" property="characterIsDeleted" />
+    <result column="character_deletetime" jdbcType="TIMESTAMP" property="characterDeletetime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.seekerhut.model.mysqlModel.Character">
+    <result column="character_prompt" jdbcType="LONGVARCHAR" property="characterPrompt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    character_id, character_userid, character_name, character_createtime, character_updatetime, 
+    character_is_deleted, character_deletetime
+  </sql>
+  <sql id="Blob_Column_List">
+    character_prompt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from character
+    where character_id = #{characterId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from character
+    where character_id = #{characterId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.seekerhut.model.mysqlModel.Character">
+    insert into character (character_id, character_userid, character_name, 
+      character_createtime, character_updatetime, 
+      character_is_deleted, character_deletetime, 
+      character_prompt)
+    values (#{characterId,jdbcType=INTEGER}, #{characterUserid,jdbcType=INTEGER}, #{characterName,jdbcType=VARCHAR}, 
+      #{characterCreatetime,jdbcType=TIMESTAMP}, #{characterUpdatetime,jdbcType=TIMESTAMP}, 
+      #{characterIsDeleted,jdbcType=VARCHAR}, #{characterDeletetime,jdbcType=TIMESTAMP}, 
+      #{characterPrompt,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.seekerhut.model.mysqlModel.Character">
+    insert into character
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="characterId != null">
+        character_id,
+      </if>
+      <if test="characterUserid != null">
+        character_userid,
+      </if>
+      <if test="characterName != null">
+        character_name,
+      </if>
+      <if test="characterCreatetime != null">
+        character_createtime,
+      </if>
+      <if test="characterUpdatetime != null">
+        character_updatetime,
+      </if>
+      <if test="characterIsDeleted != null">
+        character_is_deleted,
+      </if>
+      <if test="characterDeletetime != null">
+        character_deletetime,
+      </if>
+      <if test="characterPrompt != null">
+        character_prompt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="characterId != null">
+        #{characterId,jdbcType=INTEGER},
+      </if>
+      <if test="characterUserid != null">
+        #{characterUserid,jdbcType=INTEGER},
+      </if>
+      <if test="characterName != null">
+        #{characterName,jdbcType=VARCHAR},
+      </if>
+      <if test="characterCreatetime != null">
+        #{characterCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="characterUpdatetime != null">
+        #{characterUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="characterIsDeleted != null">
+        #{characterIsDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="characterDeletetime != null">
+        #{characterDeletetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="characterPrompt != null">
+        #{characterPrompt,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seekerhut.model.mysqlModel.Character">
+    update character
+    <set>
+      <if test="characterUserid != null">
+        character_userid = #{characterUserid,jdbcType=INTEGER},
+      </if>
+      <if test="characterName != null">
+        character_name = #{characterName,jdbcType=VARCHAR},
+      </if>
+      <if test="characterCreatetime != null">
+        character_createtime = #{characterCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="characterUpdatetime != null">
+        character_updatetime = #{characterUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="characterIsDeleted != null">
+        character_is_deleted = #{characterIsDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="characterDeletetime != null">
+        character_deletetime = #{characterDeletetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="characterPrompt != null">
+        character_prompt = #{characterPrompt,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where character_id = #{characterId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.seekerhut.model.mysqlModel.Character">
+    update character
+    set character_userid = #{characterUserid,jdbcType=INTEGER},
+      character_name = #{characterName,jdbcType=VARCHAR},
+      character_createtime = #{characterCreatetime,jdbcType=TIMESTAMP},
+      character_updatetime = #{characterUpdatetime,jdbcType=TIMESTAMP},
+      character_is_deleted = #{characterIsDeleted,jdbcType=VARCHAR},
+      character_deletetime = #{characterDeletetime,jdbcType=TIMESTAMP},
+      character_prompt = #{characterPrompt,jdbcType=LONGVARCHAR}
+    where character_id = #{characterId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seekerhut.model.mysqlModel.Character">
+    update character
+    set character_userid = #{characterUserid,jdbcType=INTEGER},
+      character_name = #{characterName,jdbcType=VARCHAR},
+      character_createtime = #{characterCreatetime,jdbcType=TIMESTAMP},
+      character_updatetime = #{characterUpdatetime,jdbcType=TIMESTAMP},
+      character_is_deleted = #{characterIsDeleted,jdbcType=VARCHAR},
+      character_deletetime = #{characterDeletetime,jdbcType=TIMESTAMP}
+    where character_id = #{characterId,jdbcType=INTEGER}
+  </update>
+</mapper>
