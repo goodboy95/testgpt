@@ -229,4 +229,61 @@ public class CommonFunctions {
         var completionStr = completionData.getString("content");
         return completionStr;
     }
+
+    public static String VoiceGenerate(String apikey, String userqq, String text, String characterid, String styleid) throws Exception {
+        var url = "https://v1.reecho.cn/api/tts/simple-generate";
+        var headers = new HashMap<String, String>() {
+            {
+                put("Authorization", String.format("Bearer %s", apikey));
+                put("Content-Type", "application/json");
+            }
+        };
+        var submitData = new JSONObject() {
+            {
+                put("voiceId", characterid);
+                put("text", text);
+                put("promptId", styleid);
+                put("randomness", 100);
+                put("stability_boost", 512);
+                put("probability_optimization", 98);
+                put("stream", false);
+            }
+        };
+        var voiceRawResult = CommonFunctions.postRequest(url, submitData, headers);
+        var voiceJsonResult = JSONObject.parseObject(voiceRawResult);
+        if (voiceJsonResult.getIntValue("status") == 200) {
+            var data = voiceJsonResult.getJSONObject("data");
+            var audioUrl = data.getString("audio");
+            var creditUsed = data.getIntValue("credit_used");
+            logger.info(String.join(String.format("userqq: %s, text: %s, url: %s, audioCredit: %s", userqq, text, audioUrl, creditUsed)));
+            JedisHelper.incrBy(String.format("audioCredit:%s:%s", userqq, LocalDate.now().format(dateFormatter)), creditUsed);
+            return audioUrl;
+        } else {
+            logger.error(String.join(String.format("userqq: %s, text: %s, errinfo", userqq, text, voiceRawResult)));
+            return "";
+        }
+    }
+
+    private static HashMap<String, String> voiceStyleMap = new HashMap<>() {
+        {
+            put("0", "default");
+            put("1", "658e4fb5"); // 平静略带忧郁
+            put("2", "default"); // 平静略带欣喜
+            put("3", "d6bfd0ea"); // 平静
+            put("4", "1b2c10cb"); // 轻松愉快
+            put("5", "8ca51c66"); // 疑惑不解
+            put("6", "4bb9a1f3"); // 愤怒
+            put("7", "584635b8"); // 感叹
+            put("8", "d505c9b0"); // 焦急（样本小于5s）
+            put("9", "5603192c"); // 兴奋（样本小于5s）
+        }
+    };
+
+    public static String GetVoiceStyleIdByEmotionNum(String emotionNum) {
+        if (voiceStyleMap.containsKey(emotionNum)) {
+            return voiceStyleMap.get(emotionNum);
+        } else {
+            return "default";
+        }
+    }
 }

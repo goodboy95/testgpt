@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seekerhut.mySqlMapper.EmotionPicDAO">
+  <resultMap id="BaseResultMap" type="com.seekerhut.model.mysqlModel.EmotionPic">
+    <id column="emotion_id" jdbcType="INTEGER" property="emotionId" />
+    <result column="emotion_token" jdbcType="VARCHAR" property="emotionToken" />
+    <result column="emotion_path" jdbcType="VARCHAR" property="emotionPath" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    emotion_id, emotion_token, emotion_path
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from emotion_pic
+    where emotion_id = #{emotionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from emotion_pic
+    where emotion_id = #{emotionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.seekerhut.model.mysqlModel.EmotionPic">
+    insert into emotion_pic (emotion_id, emotion_token, emotion_path
+      )
+    values (#{emotionId,jdbcType=INTEGER}, #{emotionToken,jdbcType=VARCHAR}, #{emotionPath,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.seekerhut.model.mysqlModel.EmotionPic">
+    insert into emotion_pic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="emotionId != null">
+        emotion_id,
+      </if>
+      <if test="emotionToken != null">
+        emotion_token,
+      </if>
+      <if test="emotionPath != null">
+        emotion_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="emotionId != null">
+        #{emotionId,jdbcType=INTEGER},
+      </if>
+      <if test="emotionToken != null">
+        #{emotionToken,jdbcType=VARCHAR},
+      </if>
+      <if test="emotionPath != null">
+        #{emotionPath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seekerhut.model.mysqlModel.EmotionPic">
+    update emotion_pic
+    <set>
+      <if test="emotionToken != null">
+        emotion_token = #{emotionToken,jdbcType=VARCHAR},
+      </if>
+      <if test="emotionPath != null">
+        emotion_path = #{emotionPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where emotion_id = #{emotionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seekerhut.model.mysqlModel.EmotionPic">
+    update emotion_pic
+    set emotion_token = #{emotionToken,jdbcType=VARCHAR},
+      emotion_path = #{emotionPath,jdbcType=VARCHAR}
+    where emotion_id = #{emotionId,jdbcType=INTEGER}
+  </update>
+  <select id="getAll" resultMap="BaseResultMap">
+    select * from emotion_pic
+  </select>
+</mapper>

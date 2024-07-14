@@ -7,20 +7,14 @@ import com.seekerhut.utils.CommonFunctions;
 import com.seekerhut.utils.JedisHelper;
 import com.seekerhut.utils.MailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.annotation.Resource;
-import java.lang.ref.SoftReference;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
 @Service("AuthService")
 public class AuthService {
-    @Resource
-    private KafkaTemplate<String, Object> kafkaTemplate;
     private DateTimeFormatter yearMonthFormatter = DateTimeFormatter.ofPattern("yyyyMM");
     private UserDAO userMapper;
 

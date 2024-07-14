@@ -5,7 +5,6 @@ import com.seekerhut.service.AuthService;
 import com.seekerhut.utils.CommonFunctions;
 import com.seekerhut.utils.JedisHelper;
 import io.swagger.annotations.ApiImplicitParams;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
