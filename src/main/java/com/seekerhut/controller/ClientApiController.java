@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/api/client")
+@RequestMapping("/jsapi/client")
 public class ClientApiController extends BaseController {
     @Resource
     private BaseConfig baseConfig;
@@ -167,7 +167,7 @@ public class ClientApiController extends BaseController {
     }
 
     @CrossOrigin
-    @PostMapping("emotion_list")
+    @GetMapping("emotion_list")
     @ApiImplicitParams({
             //@ApiImplicitParam(name = "replyJson", value = "", paramType = "body", dataType = "String"),
     })

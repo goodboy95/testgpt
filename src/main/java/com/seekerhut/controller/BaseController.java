@@ -17,8 +17,8 @@ public class BaseController {
             var jobj = new JSONObject();
             jobj.put("code", 0);
             jobj.put("message", msg);
-            if (dataStr.substring(0, 1).equals("[")) jobj.put("Data", new JSONArray(dataStr));
-            else if (dataStr.substring(0, 1).equals("{")) jobj.put("Data", new JSONObject(dataStr));
+            if (dataStr.substring(0, 1).equals("[")) jobj.put("data", new JSONArray(dataStr));
+            else if (dataStr.substring(0, 1).equals("{")) jobj.put("data", new JSONObject(dataStr));
             else jobj.put("data", data);
             return jobj.toString();
         }

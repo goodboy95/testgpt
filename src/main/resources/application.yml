@@ -7,13 +7,13 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://43.136.95.117:3306/girlfriend?useSSL=false
-    username: root
-    password: 123456
+    username: girlfriend
+    password: v0cB32ZgwPXHE4whxbKipNg6Gb4yY60s
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: 43.136.95.117
     port: 6380
-    password: 123456
+    password: pf4gmgLxYu7Fbg0DsGiocRcskxDfdD5w
     database: 1
     timeout: 1000
     prefix: gptgf

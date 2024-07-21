@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/api/login")
+@RequestMapping("/jsapi/login")
 public class LoginController extends BaseController {
     private AuthService authService;
     public LoginController(AuthService authService) {
